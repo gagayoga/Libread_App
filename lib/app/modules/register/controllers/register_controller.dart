@@ -47,10 +47,18 @@ class RegisterController extends GetxController {
         );
         if (response.statusCode == 201) {
           String username = usernameController.text.toString();
-          Get.snackbar("Success", "Selamat Datang $username, Silakan Login Dulu", backgroundColor: Colors.green, colorText: Colors.white);
+          Get.snackbar("Success", "Selamat Datang $username, Silakan Login Dulu",
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 5)
+          );
           Get.offAllNamed(Routes.LOGIN);
         } else {
-          Get.snackbar("Sorry", "Login Gagal, Coba kembali masuk dengan akun anda", backgroundColor: Colors.red, colorText: Colors.white);
+          Get.snackbar("Sorry", "Login Gagal, Coba kembali masuk dengan akun anda",
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 5)
+          );
         }
       }
       loadinglogin(false);
@@ -59,14 +67,22 @@ class RegisterController extends GetxController {
       if (e.response != null) {
         if (e.response?.data != null) {
           Get.snackbar("Sorry", "${e.response?.data['message']}",
-              backgroundColor: Colors.red, colorText: Colors.white);
+              backgroundColor: Colors.red, colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 5)
+          );
         }
       } else {
-        Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red,
+            colorText: Colors.white,
+            margin: const EdgeInsets.symmetric(vertical: 5)
+        );
       }
     } catch (e) {
       loadinglogin(false);
-      Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar("Error", e.toString(), backgroundColor: Colors.red,
+          colorText: Colors.white,
+          margin: const EdgeInsets.symmetric(vertical: 5)
+      );
     }
   }
 }

@@ -36,10 +36,10 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontSize: 18,
           color: labelColor,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
         suffix: suffixIcon,
         border: UnderlineInputBorder(
@@ -62,7 +62,7 @@ class CustomTextField extends StatelessWidget {
             color: focusColor.withOpacity(0.90),
           ),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
         hintText: hinText,
         hintStyle: GoogleFonts.inter(
           fontSize: 18,

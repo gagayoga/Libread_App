@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
@@ -56,10 +55,19 @@ class LoginController extends GetxController {
 
           String username =  StorageProvider.read(StorageKey.username);
 
-          Get.snackbar("Success", "Login berhasil, Welcome back $username", backgroundColor: Colors.green, colorText: Colors.white);
-          Get.offAllNamed(Routes.HOME);
+          Get.snackbar("Success", "Login berhasil, Welcome back $username", backgroundColor: Colors.green,
+              colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 5)
+          );
+          Get.offAllNamed(Routes.DASHBOARD);
         } else {
-          Get.snackbar("Sorry", "Login Gagal, Coba kembali masuk dengan akun anda", backgroundColor: Colors.red, colorText: Colors.white);
+          Get.snackbar(
+              "Sorry",
+              "Login Gagal, Coba kembali masuk dengan akun anda",
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 5)
+          );
         }
       }
       loadinglogin(false);
@@ -68,14 +76,24 @@ class LoginController extends GetxController {
       if (e.response != null) {
         if (e.response?.data != null) {
           Get.snackbar("Sorry", "${e.response?.data['message']}",
-              backgroundColor: Colors.red, colorText: Colors.white);
+              backgroundColor: Colors.red, colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 5)
+          );
         }
       } else {
-        Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red,
+            colorText: Colors.white,
+            margin: const EdgeInsets.symmetric(vertical: 5)
+        );
       }
     } catch (e) {
       loadinglogin(false);
-      Get.snackbar("Error", e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+          "Error", e.toString(),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          margin: const EdgeInsets.symmetric(vertical: 5)
+      );
     }
   }
 }

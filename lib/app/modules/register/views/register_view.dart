@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,59 +17,69 @@ class RegisterView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-
     const Color primary = Color(0xFFFF0000);
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      builder: (context, _)=> Scaffold(
+        body: SafeArea(
           child: Container(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-              child: Form(
-                key: controller.formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Image.asset(
-                        'lib/assets/image/logo_black.png',
+            child: Form(
+              key: controller.formKey,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      SizedBox(
+                        height: 30.h,
+                      ),
+
+                      SvgPicture.asset(
+                        'lib/assets/image/logo_black.svg',
                         fit: BoxFit.cover,
                         width: 100,
                         height: 100,
                       ),
-                    ),
-                    AutoSizeText(
-                      'Sign up to make your personal account',
-                      maxLines: 2,
-                      maxFontSize: 25,
-                      minFontSize: 20,
-                      style: GoogleFonts.inter(
-                          color: Colors.black,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.w700),
-                    ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: CustomTextField(
+                      SizedBox(
+                        height: 5.h,
+                      ),
+
+                      AutoSizeText(
+                        'Register',
+                        style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 35.0,
+                            fontWeight: FontWeight.w700
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 15.h,
+                      ),
+
+                      CustomTextField(
                         labelText: "Username",
                         controller: controller.usernameController,
-                        hinText: "Ryan",
+                        hinText: "Ryan Waskita",
                         obsureText: false,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Pleasse input username';
                           }
+
                           return null;
                         },
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child:  CustomTextField(
+
+                      SizedBox(
+                        height: 5.h,
+                      ),
+
+                      CustomTextField(
                         labelText: "Email",
                         controller: controller.emailController,
                         hinText: "ryan@smk.belajar.id",
@@ -77,82 +89,84 @@ class RegisterView extends GetView<RegisterController> {
                             return 'Pleasse input email address';
                           } else if (!EmailValidator.validate(value)) {
                             return 'Email address tidak sesuai';
-                          } else if (!value.endsWith('@smk.belajar.id')) {
+                          }else if (!value.endsWith('@smk.belajar.id')){
                             return 'Email harus @smk.belajar.id';
                           }
 
                           return null;
                         },
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Obx(
-                            () => CustomTextField(
-                              labelText: "Password",
-                              controller: controller.passwordController,
-                              hinText: "password",
-                              obsureText: controller.isPasswordHidden.value,
-                              suffixIcon: InkWell(
-                                child: Icon(
-                                  controller.isPasswordHidden.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  size: 20,
-                                  color: primary,
-                                ),
-                                onTap: () {
-                                  controller.isPasswordHidden.value =
-                                      !controller.isPasswordHidden.value;
-                                },
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Pleasse input password';
-                                }
 
-                                return null;
+                      SizedBox(
+                        height: 5.h,
+                      ),
+
+                      Obx(() =>
+                          CustomTextField(
+                            labelText: "Password",
+                            controller: controller.passwordController,
+                            hinText: "password",
+                            obsureText: controller.isPasswordHidden.value,
+
+                            suffixIcon: InkWell(
+                              child: Icon(
+                                controller.isPasswordHidden.value
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                size: 20,
+                                color: primary,
+                              ),
+                              onTap: () {
+                                controller.isPasswordHidden.value =
+                                !controller.isPasswordHidden.value;
                               },
                             ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Pleasse input password';
+                              }
+                              return null;
+                            },
                           ),
+                      ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50, bottom: 30),
-                            child: SizedBox(
-                              width: width,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: () => controller.registerPost(),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: primary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                ),
-                                child: Obx(
-                                  () => controller.loadinglogin.value
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
-                                      : Text(
-                                          "Register",
-                                          style: TextStyle(
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white),
-                                        ),
-                                ),
-                              ),
+                      SizedBox(
+                        height: 30.h,
+                      ),
+
+                      SizedBox(
+                        width: width,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: ()=> controller.registerPost(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
                             ),
                           ),
-                        ]),
-                    textToRegister(),
-                  ],
+                          child: Obx(() => controller.loadinglogin.value?
+                          const CircularProgressIndicator(
+                            color: Colors.white,
+                          ): const Text(
+                            "Register",
+                            style: TextStyle(
+                                fontSize: 23,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white
+                            ),
+                          ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 15.h,
+                      ),
+
+                      textToRegister(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -188,7 +202,7 @@ class RegisterView extends GetView<RegisterController> {
               child: Text('Login',
                   style: GoogleFonts.inter(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: const Color(0xFF4CB3E0),
                   )),
             ),
