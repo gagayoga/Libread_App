@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -16,13 +17,22 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     const Color primary = Color(0xFFFF0000);
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,// Change this color as needed
+    ));
 
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       builder: (context, _)=> Scaffold(
         body: SafeArea(
           child: Container(
+            color: Colors.black,
+            width: width,
+            height: height,
             child: Form(
               key: controller.formKey,
               child: SingleChildScrollView(
@@ -37,20 +47,20 @@ class LoginView extends GetView<LoginController> {
                       ),
 
                       SvgPicture.asset(
-                        'lib/assets/image/logo_black.svg',
+                        'lib/assets/image/logo_white.svg',
                         fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
+                        width: 75,
+                        height: 75,
                       ),
 
                       SizedBox(
-                        height: 5.h,
+                        height: 10.h,
                       ),
 
                       AutoSizeText(
                           'Login',
                         style: GoogleFonts.inter(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 35.0,
                           fontWeight: FontWeight.w700
                         ),
@@ -59,7 +69,7 @@ class LoginView extends GetView<LoginController> {
                       textToRegister(),
 
                       SizedBox(
-                        height: 15.h,
+                        height: 10.h,
                       ),
 
                       CustomTextField(
@@ -134,7 +144,7 @@ class LoginView extends GetView<LoginController> {
                           ): const Text(
                             "Login",
                             style: TextStyle(
-                                fontSize: 23,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white
                             ),
@@ -159,14 +169,12 @@ class LoginView extends GetView<LoginController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          FittedBox(
-            child: Text(
-              'New to Libread?',
-              style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black),
-            ),
+          Text(
+            'New to Libread?',
+            style: GoogleFonts.inter(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.white),
           ),
           TextButton(
             onPressed: () {
@@ -177,15 +185,13 @@ class LoginView extends GetView<LoginController> {
               disabledBackgroundColor: Colors.transparent,
               visualDensity: VisualDensity.compact,
             ),
-            child: FittedBox(
-              child: Text('Register now',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF4CB3E0),
-                    ),
-                  )
-    ),
+            child: Text('Register now',
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF4CB3E0),
+                  ),
+                ),
             ),
         ],
       ),

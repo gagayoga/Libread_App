@@ -9,7 +9,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final FormFieldValidator<String>? validator;
 
-  CustomTextField({
+  const CustomTextField({
     super.key,
     required this.controller,
     required this.hinText,
@@ -29,15 +29,15 @@ class CustomTextField extends StatelessWidget {
       obscureText: obsureText,
       controller: controller,
       style: GoogleFonts.inter(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: Colors.white,
       ),
       decoration: InputDecoration(
         labelText: labelText,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelStyle: const TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           color: labelColor,
           fontWeight: FontWeight.w500,
         ),
@@ -65,7 +65,7 @@ class CustomTextField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
         hintText: hinText,
         hintStyle: GoogleFonts.inter(
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.w600,
           color: Colors.grey,
         ),

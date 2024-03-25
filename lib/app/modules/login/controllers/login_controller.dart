@@ -57,7 +57,7 @@ class LoginController extends GetxController {
 
           Get.snackbar("Success", "Login berhasil, Welcome back $username", backgroundColor: Colors.green,
               colorText: Colors.white,
-              margin: const EdgeInsets.symmetric(vertical: 5)
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
           );
           Get.offAllNamed(Routes.DASHBOARD);
         } else {
@@ -66,7 +66,7 @@ class LoginController extends GetxController {
               "Login Gagal, Coba kembali masuk dengan akun anda",
               backgroundColor: Colors.red,
               colorText: Colors.white,
-              margin: const EdgeInsets.symmetric(vertical: 5)
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
           );
         }
       }
@@ -77,13 +77,13 @@ class LoginController extends GetxController {
         if (e.response?.data != null) {
           Get.snackbar("Sorry", "${e.response?.data['message']}",
               backgroundColor: Colors.red, colorText: Colors.white,
-              margin: const EdgeInsets.symmetric(vertical: 5)
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
           );
         }
       } else {
         Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red,
             colorText: Colors.white,
-            margin: const EdgeInsets.symmetric(vertical: 5)
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
         );
       }
     } catch (e) {
@@ -92,7 +92,7 @@ class LoginController extends GetxController {
           "Error", e.toString(),
           backgroundColor: Colors.red,
           colorText: Colors.white,
-          margin: const EdgeInsets.symmetric(vertical: 5)
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
       );
     }
   }

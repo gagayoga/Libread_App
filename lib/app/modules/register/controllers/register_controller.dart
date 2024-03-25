@@ -50,14 +50,14 @@ class RegisterController extends GetxController {
           Get.snackbar("Success", "Selamat Datang $username, Silakan Login Dulu",
               backgroundColor: Colors.green,
               colorText: Colors.white,
-              margin: const EdgeInsets.symmetric(vertical: 5)
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
           );
           Get.offAllNamed(Routes.LOGIN);
         } else {
           Get.snackbar("Sorry", "Login Gagal, Coba kembali masuk dengan akun anda",
               backgroundColor: Colors.red,
               colorText: Colors.white,
-              margin: const EdgeInsets.symmetric(vertical: 5)
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
           );
         }
       }
@@ -68,20 +68,20 @@ class RegisterController extends GetxController {
         if (e.response?.data != null) {
           Get.snackbar("Sorry", "${e.response?.data['message']}",
               backgroundColor: Colors.red, colorText: Colors.white,
-              margin: const EdgeInsets.symmetric(vertical: 5)
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
           );
         }
       } else {
         Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red,
             colorText: Colors.white,
-            margin: const EdgeInsets.symmetric(vertical: 5)
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
         );
       }
     } catch (e) {
       loadinglogin(false);
       Get.snackbar("Error", e.toString(), backgroundColor: Colors.red,
           colorText: Colors.white,
-          margin: const EdgeInsets.symmetric(vertical: 5)
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
       );
     }
   }

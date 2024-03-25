@@ -18,7 +18,7 @@ class DashboardView extends StatelessWidget{
               body: Center(
                   child: IndexedStack(
                     index: controller.tabIndex,
-                    children: const [
+                    children:  [
                       HomeView(),
                       SearchBookView(),
                       HomeView(),

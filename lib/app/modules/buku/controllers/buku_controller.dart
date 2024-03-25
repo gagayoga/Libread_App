@@ -1,14 +1,13 @@
 import 'package:get/get.dart';
+import 'package:libread_ryan/app/data/model/response_book.dart';
+import 'package:libread_ryan/app/data/model/response_popular_book.dart';
 import 'package:dio/dio.dart';
 
 import '../../../data/constant/endpoint.dart';
-import '../../../data/model/response_book_new.dart';
-import '../../../data/model/response_popular_book.dart';
 import '../../../data/provider/api_provider.dart';
 
-class HomeController extends GetxController with StateMixin{
-
-  var newBooks = Rxn<List<DataBookNew>>();
+class BukuController extends GetxController with StateMixin{
+  var allBooks = Rxn<List<DataBook>>();
   var popularBooks = Rxn<List<DataPopularBook>>();
 
   @override
@@ -31,17 +30,17 @@ class HomeController extends GetxController with StateMixin{
     change(null, status: RxStatus.loading());
 
     try {
-      final responseNew = await ApiProvider.instance().get(Endpoint.bukuNew);
+      final responseAll = await ApiProvider.instance().get(Endpoint.buku);
       final responsePopular = await ApiProvider.instance().get(Endpoint.bukuPopular);
 
-      if (responseNew.statusCode == 200 && responsePopular.statusCode == 200) {
-        final ResponseBookNew responseBukuNew = ResponseBookNew.fromJson(responseNew.data);
+      if (responseAll.statusCode == 200 && responsePopular.statusCode == 200) {
+        final ResponseBook responseBuku = ResponseBook.fromJson(responseAll.data);
         final ResponsePopularBook responseBukuPopular = ResponsePopularBook.fromJson(responsePopular.data);
 
-        if (responseBukuNew.data!.isEmpty && responseBukuPopular.data!.isEmpty) {
+        if (responseBuku.data!.isEmpty && responseBukuPopular.data!.isEmpty) {
           change(null, status: RxStatus.empty());
         } else {
-          newBooks(responseBukuNew.data!);
+          allBooks(responseBuku.data!);
           popularBooks(responseBukuPopular.data!);
           change(null, status: RxStatus.success());
         }

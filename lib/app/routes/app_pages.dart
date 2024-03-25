@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:libread_ryan/app/modules/searchbook/bindings/searchbook_binding.dart';
 
+import '../modules/buku/bindings/buku_binding.dart';
+import '../modules/buku/views/buku_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -11,6 +12,7 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/searchbook/bindings/searchbook_binding.dart';
 import '../modules/searchbook/views/searchbook_view.dart';
 import '../modules/splashscreen/bindings/splashscreen_binding.dart';
 import '../modules/splashscreen/views/splashscreen_view.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.BUKU,
+      page: () => const BukuView(),
+      binding: BukuBinding(),
     ),
   ];
 }

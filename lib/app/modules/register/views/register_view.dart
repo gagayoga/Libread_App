@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -17,13 +18,22 @@ class RegisterView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     const Color primary = Color(0xFFFF0000);
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,// Change this color as needed
+    ));
 
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       builder: (context, _)=> Scaffold(
         body: SafeArea(
           child: Container(
+            width: width,
+            height: height,
+            color: Colors.black,
             child: Form(
               key: controller.formKey,
               child: SingleChildScrollView(
@@ -38,22 +48,41 @@ class RegisterView extends GetView<RegisterController> {
                       ),
 
                       SvgPicture.asset(
-                        'lib/assets/image/logo_black.svg',
+                        'lib/assets/image/logo_white.svg',
                         fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
+                        width: 75,
+                        height: 75,
                       ),
 
                       SizedBox(
-                        height: 5.h,
+                        height: 10.h,
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 40),
+                        child: AutoSizeText(
+                          'Sign up to make your personal account',
+                          maxLines: 2,
+                          style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 28.0,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.7,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 15.h,
                       ),
 
                       AutoSizeText(
-                        'Register',
+                        'Create your account.',
+                        maxLines: 1,
                         style: GoogleFonts.inter(
-                            color: Colors.black,
-                            fontSize: 35.0,
-                            fontWeight: FontWeight.w700
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600
                         ),
                       ),
 
@@ -151,7 +180,7 @@ class RegisterView extends GetView<RegisterController> {
                           ): const Text(
                             "Register",
                             style: TextStyle(
-                                fontSize: 23,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white
                             ),
@@ -188,7 +217,7 @@ class RegisterView extends GetView<RegisterController> {
               style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black),
+                  color: Colors.white),
             ),
           ),
           TextButton(
