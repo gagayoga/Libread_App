@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:libread_ryan/components/customListBuku.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -15,7 +14,12 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Color
     const Color background = Color(0xFF000000);
+    const Color textYellow = Color(0xFFFAFF00);
+
+    // Size
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -25,77 +29,130 @@ class HomeView extends GetView<HomeController> {
     ));
 
     return Scaffold(
-        body: Container(
-      width: width,
-      height: height,
-      color: background,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  'lib/assets/background/bg_home.png',
-                  width: double.infinity,
-                  height: 450.h,
-                  fit: BoxFit.cover,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: sectionUcapan(),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-              child: sectionTrendingBuku(),
-            ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            await controller.getData();
+          },
+          child: Container(
+                width: width,
+                height: height,
+                color: background,
+                child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Image.asset(
+                    'lib/assets/background/bg_home.png',
+                    width: double.infinity,
+                    height: 450.h,
+                    fit: BoxFit.cover,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: sectionUcapan(),
+                  ),
 
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: sectionListBuku(),
-            ),
-          ],
-        ),
-      ),
-    ));
+                  Positioned(
+                      bottom: 50,
+                      right: 0,
+                      left: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              maxLines: 3,
+                              text: TextSpan(
+                                text: 'Welcome to our application ',
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: 'Libread',
+                                    style: GoogleFonts.inter(
+                                      color: textYellow,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: height * 0.025,
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              "Step into a world of knowledge and wonder as you explore our "
+                                  "digital library. We're thrilled to have you join us on this "
+                                  "literary adventure, where every book holds the promise of "
+                                  "discovery and excitement",
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: -0.3,
+                                height: 1.4
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: height * 0.015,
+                          ),
+
+                          Text(
+                            'Start Exploring Now!',
+                            style: GoogleFonts.inter(
+                                color: textYellow,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                            ),
+                          )
+                        ],
+                     )
+                  )
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                child: sectionTrendingBuku(),
+              ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.h),
+                child: sectionListBuku(),
+              ),
+            ],
+          ),
+                ),
+              ),
+        )
+    );
   }
 
   Widget sectionUcapan() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 40.w),
       child: SizedBox(
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              'lib/assets/image/logo_white.svg',
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(
-              width: 10.w,
-            ),
-            Expanded(
-              child: FittedBox(
-                child: AutoSizeText(
-                  'Libread Aplikasi Perpustakaan Digital Berbasis Mobile',
-                  maxLines: 2,
-                  minFontSize: 10,
-                  maxFontSize: 16,
-                  textAlign: TextAlign.start,
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ],
+        width: 50,
+        height: 50,
+        child: SvgPicture.asset(
+          'lib/assets/image/logo_white.svg',
+          height: 50,
+          width: 50,
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -148,7 +205,13 @@ class HomeView extends GetView<HomeController> {
                       children: controller.popularBooks.value!.map((buku) {
                         return InkWell(
                           onTap: () {
-                            // Implementasi logika ketika buku ditekan
+                            Get.toNamed(
+                              Routes.DETAILBOOK,
+                              parameters: {
+                                'id': (buku.bukuID ?? 0).toString(),
+                                'judul': (buku.judul!).toString(),
+                              },
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(right: 10),
@@ -200,8 +263,7 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
         ),
-        GetBuilder<HomeController>(
-          builder: (controller) {
+        Obx(() {
             if (controller.newBooks.isNull) {
               return const Center(
                 child: CircularProgressIndicator(
@@ -233,56 +295,22 @@ class HomeView extends GetView<HomeController> {
                   var buku = controller.newBooks.value![index];
                   return InkWell(
                     onTap: () {
-                      // Implementasi logika ketika buku ditekan
+                      Get.toNamed(
+                        Routes.DETAILBOOK,
+                        parameters: {
+                          'id': (buku.bukuID ?? 0).toString(),
+                          'judul': (buku.judulBuku!).toString(),
+                        },
+                      );
                     },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 4 / 4,
-                            child: Image.network(
-                              buku.coverBuku.toString(),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                    child: SizedBox(
+                      child: AspectRatio(
+                        aspectRatio: 4 / 4,
+                        child: Image.network(
+                          buku.coverBuku.toString(),
+                          fit: BoxFit.cover,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            border: Border.all(
-                              color: Colors.grey.withOpacity(0.30), // Warna garis pinggir
-                              width: 0.5, // Lebar garis pinggir
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: (){},
-                                  child: const Icon(
-                                    Icons.info_outline,
-                                    color: Colors.white,
-                                    size: 24,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: (){},
-                                  child: const Icon(
-                                    Icons.bookmark_outline,
-                                    color: Colors.white,
-                                    size: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   );
                 },

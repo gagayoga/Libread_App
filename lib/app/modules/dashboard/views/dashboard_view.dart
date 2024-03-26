@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:libread_ryan/app/modules/buku/views/buku_view.dart';
 import 'package:libread_ryan/app/modules/profile/views/profile_view.dart';
 import 'package:libread_ryan/app/modules/searchbook/views/searchbook_view.dart';
 
@@ -21,7 +22,7 @@ class DashboardView extends StatelessWidget{
                     children:  [
                       HomeView(),
                       SearchBookView(),
-                      HomeView(),
+                      BukuView(),
                       ProfileView(),
                     ],
                   )

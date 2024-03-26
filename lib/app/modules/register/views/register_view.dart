@@ -60,7 +60,7 @@ class RegisterView extends GetView<RegisterController> {
 
                       Padding(
                         padding: const EdgeInsets.only(right: 40),
-                        child: AutoSizeText(
+                        child: Text(
                           'Sign up to make your personal account',
                           maxLines: 2,
                           style: GoogleFonts.inter(
@@ -76,7 +76,7 @@ class RegisterView extends GetView<RegisterController> {
                         height: 15.h,
                       ),
 
-                      AutoSizeText(
+                      Text(
                         'Create your account.',
                         maxLines: 1,
                         style: GoogleFonts.inter(

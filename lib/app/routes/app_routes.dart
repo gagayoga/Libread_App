@@ -11,6 +11,7 @@ abstract class Routes {
   static const SEARCH = _Paths.SEARCH;
   static const PROFILE = _Paths.PROFILE;
   static const BUKU = _Paths.BUKU;
+  static const DETAILBOOK = _Paths.DETAILBOOK;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const SEARCH = '/search';
   static const PROFILE = '/profile';
   static const BUKU = '/buku';
+  static const DETAILBOOK = '/detailbook';
 }

@@ -1,14 +1,21 @@
 import 'package:get/get.dart';
-import 'package:libread_ryan/app/data/model/response_book.dart';
-import 'package:libread_ryan/app/data/model/response_popular_book.dart';
 import 'package:dio/dio.dart';
 
 import '../../../data/constant/endpoint.dart';
+import '../../../data/model/response_history_peminjaman.dart';
+import '../../../data/model/response_koleksi_book.dart';
 import '../../../data/provider/api_provider.dart';
+import '../../../data/provider/storage_provider.dart';
 
 class BukuController extends GetxController with StateMixin{
-  var allBooks = Rxn<List<DataBook>>();
-  var popularBooks = Rxn<List<DataPopularBook>>();
+
+  var koleksiBook = Rxn<List<DataKoleksiBook>>();
+  var historyPeminjaman = Rxn<List<DataHistory>>();
+  String idUser = StorageProvider.read(StorageKey.idUser);
+
+  // Jumlah Data
+  int get jumlahKoleksiBook => koleksiBook.value?.length ?? 0;
+  int get jumlahHistoryPeminjaman => historyPeminjaman.value?.length ?? 0;
 
   @override
   void onInit() {
@@ -30,18 +37,20 @@ class BukuController extends GetxController with StateMixin{
     change(null, status: RxStatus.loading());
 
     try {
-      final responseAll = await ApiProvider.instance().get(Endpoint.buku);
-      final responsePopular = await ApiProvider.instance().get(Endpoint.bukuPopular);
+      final responseKoleksiBuku = await ApiProvider.instance().get(
+          '${Endpoint.koleksiBuku}/$idUser');
+      final responseHistoryPeminjaman = await ApiProvider.instance().get(
+          '${Endpoint.historyPeminjaman}/$idUser');
 
-      if (responseAll.statusCode == 200 && responsePopular.statusCode == 200) {
-        final ResponseBook responseBuku = ResponseBook.fromJson(responseAll.data);
-        final ResponsePopularBook responseBukuPopular = ResponsePopularBook.fromJson(responsePopular.data);
+      if (responseKoleksiBuku.statusCode == 200 && responseHistoryPeminjaman.statusCode == 200) {
+        final ResponseKoleksiBook responseKoleksi = ResponseKoleksiBook.fromJson(responseKoleksiBuku.data);
+        final ResponseHistoryPeminjaman responseHistory = ResponseHistoryPeminjaman.fromJson(responseHistoryPeminjaman.data);
 
-        if (responseBuku.data!.isEmpty && responseBukuPopular.data!.isEmpty) {
+        if (responseKoleksi.data!.isEmpty && responseHistory.data!.isEmpty) {
           change(null, status: RxStatus.empty());
         } else {
-          allBooks(responseBuku.data!);
-          popularBooks(responseBukuPopular.data!);
+          koleksiBook(responseKoleksi.data!);
+          historyPeminjaman(responseHistory.data!);
           change(null, status: RxStatus.success());
         }
       } else {
