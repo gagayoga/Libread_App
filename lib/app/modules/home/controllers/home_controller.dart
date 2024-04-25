@@ -2,14 +2,14 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 
 import '../../../data/constant/endpoint.dart';
-import '../../../data/model/response_book_new.dart';
-import '../../../data/model/response_popular_book.dart';
+import '../../../data/model/buku/response_book_new.dart';
+import '../../../data/model/buku/response_popular_book.dart';
 import '../../../data/provider/api_provider.dart';
 
 class HomeController extends GetxController with StateMixin{
 
-  var newBooks = Rxn<List<DataBookNew>>();
-  var popularBooks = Rxn<List<DataPopularBook>>();
+  var newBooks = RxList<DataBookNew>();
+  var popularBooks = RxList<DataPopularBook>();
 
   @override
   void onInit() {
@@ -28,6 +28,8 @@ class HomeController extends GetxController with StateMixin{
   }
 
   Future<void> getData() async {
+    newBooks.clear();
+    popularBooks.clear();
     change(null, status: RxStatus.loading());
 
     try {
@@ -39,10 +41,12 @@ class HomeController extends GetxController with StateMixin{
         final ResponsePopularBook responseBukuPopular = ResponsePopularBook.fromJson(responsePopular.data);
 
         if (responseBukuNew.data!.isEmpty && responseBukuPopular.data!.isEmpty) {
+          newBooks.clear();
+          popularBooks.clear();
           change(null, status: RxStatus.empty());
         } else {
-          newBooks(responseBukuNew.data!);
-          popularBooks(responseBukuPopular.data!);
+          newBooks.assignAll(responseBukuNew.data!);
+          popularBooks.assignAll(responseBukuPopular.data!);
           change(null, status: RxStatus.success());
         }
       } else {

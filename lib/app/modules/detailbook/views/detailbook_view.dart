@@ -5,7 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../data/model/response_detail_book.dart';
+import '../../../data/model/buku/response_detail_buku.dart';
 import '../controllers/detailbook_controller.dart';
 
 class DetailbookView extends GetView<DetailbookController> {
@@ -24,6 +24,7 @@ class DetailbookView extends GetView<DetailbookController> {
         appBar: AppBar(
           backgroundColor: background,
           toolbarHeight: 50,
+          titleSpacing: 0,
           title: Text(
             Get.parameters['judul'].toString(),
             style: GoogleFonts.inter(
@@ -214,12 +215,14 @@ class DetailbookView extends GetView<DetailbookController> {
                             dataBuku.status == 'Tersimpan' ? CupertinoIcons.bookmark_solid : Icons.bookmark_add_rounded,
                           color: dataBuku.status == 'Tersimpan' ? Colors.white : const Color(0xFFFF0000),
                         ),
-                        label: Text(
-                          dataBuku.status == 'Tersimpan' ? 'Saved Book' : 'Add Bookmark',
-                          style: GoogleFonts.inter(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: dataBuku.status == 'Tersimpan' ? Colors.white : const Color(0xFFFF0000),
+                        label: FittedBox(
+                          child: Text(
+                            dataBuku.status == 'Tersimpan' ? 'Saved Book' : 'Add Bookmark',
+                            style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: dataBuku.status == 'Tersimpan' ? Colors.white : const Color(0xFFFF0000),
+                            ),
                           ),
                         ),
                       ),
@@ -323,20 +326,26 @@ class DetailbookView extends GetView<DetailbookController> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
-
+                              if (dataBuku.statusPeminjaman == 'Belum dipinjam') {
+                                controller.showConfirmPeminjaman(() => Navigator.pop(Get.context!, 'OK'), 'Submit');
+                              }else if(dataBuku.statusPeminjaman == 'Dipinjam'){
+                                return;
+                              }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFFF0000),
+                              backgroundColor: dataBuku.statusPeminjaman == 'Belum dipinjam' ? const Color(0xFFFF0000) : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            child: const Text(
-                              "Borrow Book",
-                              style: TextStyle(
+                            child: Text(
+                              dataBuku.statusPeminjaman == 'Belum dipinjam'
+                                  ? 'Borrow Book' : 'Borrowed',
+                              style: GoogleFonts.inter(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white
+                                  fontWeight: FontWeight.w600,
+                                  color: dataBuku.statusPeminjaman == 'Belum dipinjam'
+                                      ? Colors.white : Colors.red
                               ),
                             ),
                           ),

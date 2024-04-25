@@ -25,9 +25,9 @@ class CustomTabBar extends StatelessWidget {
               tittle,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.inter(
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFFFF0000),
-                fontSize: 18
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                fontSize: 14
               ),
             ),
           ),
@@ -37,14 +37,14 @@ class CustomTabBar extends StatelessWidget {
             margin: const EdgeInsetsDirectional.only(start: 5),
             padding: const EdgeInsets.all(5),
             decoration: const BoxDecoration(
-              color: Color(0xFFFF0000),
+              color: Colors.white,
               shape: BoxShape.circle
             ),
             child: Center(
               child: Text(
                 count > 20 ? "20++" : count.toString(),
                 style: GoogleFonts.inter(
-                  color: Colors.white,
+                  color: const Color(0xFFFF0000),
                 ),
               ),
             ),

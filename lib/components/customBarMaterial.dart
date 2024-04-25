@@ -34,7 +34,7 @@ class CustomBottomBarMaterial extends StatelessWidget {
       selectedLabelStyle: GoogleFonts.inter(
           fontWeight: FontWeight.w600
       ),
-      iconSize: 24,
+      iconSize: 26,
       showUnselectedLabels: true,
       items: [
         _bottomNavigationBarItem(

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:libread_ryan/app/routes/app_pages.dart';
 
+import '../../../data/provider/storage_provider.dart';
 import '../controllers/splashscreen_controller.dart';
 
 class SplashscreenView extends GetView<SplashscreenController> {
@@ -16,9 +17,16 @@ class SplashscreenView extends GetView<SplashscreenController> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
+    // Fungsi untuk berpindah halaman otomatis ke login
     Future.delayed(
-      const Duration(milliseconds: 4000),
-            () => Get.offAllNamed(Routes.LOGIN)
+        const Duration(milliseconds: 4000),((){
+      String? status = StorageProvider.read(StorageKey.status);
+      if (status == "logged") {
+        Get.offAllNamed(Routes.DASHBOARD);
+      }else{
+        Get.offAllNamed(Routes.LOGIN);
+      }
+    })
     );
 
     return Scaffold(

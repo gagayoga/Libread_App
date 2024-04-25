@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
@@ -125,19 +126,69 @@ class HomeView extends GetView<HomeController> {
                   )
                 ],
               ),
+
               Padding(
                 padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                child: sectionTrendingBuku(),
+                child: SizedBox(
+                  width: width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 15.w),
+                        child: Text(
+                          "Trending",
+                          style: GoogleFonts.amiko(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      Obx(() => controller.popularBooks.isEmpty ?
+                          shimmerTrendingBuku() : sectionTrendingBuku(),
+                      ),
+                    ],
+                  ),
+                ),
               ),
 
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.h),
-                child: sectionListBuku(),
-              ),
-            ],
-          ),
+                padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                child: SizedBox(
+                  width: width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 15.w),
+                        child: Text(
+                          "View More",
+                          style: GoogleFonts.amiko(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                      Obx(() => controller.newBooks.isEmpty ?
+                      shimmerSectionListBuku() : sectionListBuku(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+
+            ],
+          ),),),
         )
     );
   }
@@ -159,166 +210,181 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget sectionTrendingBuku() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 15.w),
-          child: Text(
-            "Trending",
-            style: GoogleFonts.amiko(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-
-        GetBuilder<HomeController>(
-          builder: (controller) {
-            if (controller.popularBooks.isNull) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black,
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFEA1818)),
-                ),
-              );
-            } else if (controller.popularBooks.value == null) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black,
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFEA1818)),
-                ),
-              );
-            } else {
-              return SizedBox(
-                  height: 100,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: controller.popularBooks.value!.map((buku) {
-                        return InkWell(
-                          onTap: () {
-                            Get.toNamed(
-                              Routes.DETAILBOOK,
-                              parameters: {
-                                'id': (buku.bukuID ?? 0).toString(),
-                                'judul': (buku.judul!).toString(),
-                              },
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: AspectRatio(
-                                      aspectRatio: 4 / 4,
-                                      child: Image.network(
-                                        buku.coverBuku.toString(),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+    return SizedBox(
+      height: 100,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            ...controller.popularBooks.map((buku) {
+              return InkWell(
+                onTap: () {
+                  Get.toNamed(
+                    Routes.DETAILBOOK,
+                    parameters: {
+                      'id': (buku.bukuID ?? 0).toString(),
+                      'judul': (buku.judul!).toString(),
+                    },
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: AspectRatio(
+                            aspectRatio: 4 / 4,
+                            child: Image.network(
+                              buku.coverBuku.toString(),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  )
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
-            }
+            }).toList(),
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: AspectRatio(
+                  aspectRatio: 4 / 4,
+                  child: GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: Container(
+                      color: Colors.grey.withOpacity(0.20), // Adjust color as needed
+                      child: Center(
+                        child: Text(
+                          'View More',
+                          style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget shimmerTrendingBuku(){
+    int itemCount = 4;
+    
+    return Shimmer.fromColors(
+      baseColor: Colors.black.withOpacity(0.30),
+      highlightColor: Colors.grey.shade50,
+      child: SizedBox(
+        height: 100,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: itemCount,
+          itemBuilder: (context, index) {
+            return SizedBox(
+              width: 100,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: AspectRatio(
+                    aspectRatio: 4/4,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+            );
           },
         ),
-      ],
+      ),
     );
   }
 
   Widget sectionListBuku() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 15.w),
-          child: Text(
-            "View More",
-            style: GoogleFonts.amiko(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+        childAspectRatio: 3 / 4,
+      ),
+      itemCount: controller.newBooks.length,
+      itemBuilder: (context, index) {
+        var buku = controller.newBooks[index];
+        return InkWell(
+          onTap: () {
+            Get.toNamed(
+              Routes.DETAILBOOK,
+              parameters: {
+                'id': (buku.bukuID ?? 0).toString(),
+                'judul': (buku.judulBuku!).toString(),
+              },
+            );
+          },
+          child: SizedBox(
+            child: AspectRatio(
+              aspectRatio: 4 / 4,
+              child: Image.network(
+                buku.coverBuku.toString(),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        Obx(() {
-            if (controller.newBooks.isNull) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black,
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFEA1818)),
-                ),
-              );
-            } else if (controller.newBooks.value == null) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black,
-                  backgroundColor: Colors.grey,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFEA1818)),
-                ),
-              );
-            } else {
-              return GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 20.0,
-                  childAspectRatio: 3 / 5,
-                ),
-                itemCount: controller.newBooks.value!.length,
-                itemBuilder: (context, index) {
-                  var buku = controller.newBooks.value![index];
-                  return InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        Routes.DETAILBOOK,
-                        parameters: {
-                          'id': (buku.bukuID ?? 0).toString(),
-                          'judul': (buku.judulBuku!).toString(),
-                        },
-                      );
-                    },
-                    child: SizedBox(
-                      child: AspectRatio(
-                        aspectRatio: 4 / 4,
-                        child: Image.network(
-                          buku.coverBuku.toString(),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            }
-          },
-        ),
-      ],
+        );
+      },
     );
   }
+
+  Widget shimmerSectionListBuku() {
+    int itemCount = 6;
+
+    return Shimmer.fromColors(
+      baseColor: Colors.black.withOpacity(0.30),
+      highlightColor: Colors.grey.shade50,
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          childAspectRatio: 3 / 4,
+        ),
+        itemCount: itemCount,
+        itemBuilder: (context, index) {
+          return SizedBox(
+            child: AspectRatio(
+              aspectRatio: 4 / 4,
+              child: Container(
+                color: Colors.grey,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
 }
