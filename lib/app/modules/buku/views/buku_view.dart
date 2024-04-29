@@ -132,10 +132,17 @@ class BukuView extends GetView<BukuController> {
                 height: 190,
                 child: InkWell(
                   onTap: (){
-                    dataHistory.status == 'Selesai' ? controller.kontenBeriUlasan(dataHistory.bukuId.toString(), dataHistory.judulBuku.toString()) :
-                    controller.showBuktiPeminjaman(dataHistory.kodePeminjaman.toString(),
-                        dataHistory.judulBuku.toString(), dataHistory.tanggalPinjam.toString(),
-                        dataHistory.tanggalKembali.toString());
+                    if(dataHistory.status == 'Booking'){
+                      controller.showConfirmPeminjaman(dataHistory.peminjamanID.toString(), 'booking');
+                    }else if(dataHistory.status == 'Dipinjam'){
+                      controller.showBuktiPeminjaman(dataHistory.kodePeminjaman.toString(),
+                          dataHistory.judulBuku.toString(), dataHistory.tanggalPinjam.toString(),
+                          dataHistory.tanggalKembali.toString(), dataHistory.peminjamanID.toString());
+                    }else if(dataHistory.status == 'Selesai'){
+                      controller.kontenBeriUlasan(dataHistory.bukuId.toString(), dataHistory.judulBuku.toString());
+                    }else{
+                      return;
+                    }
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -168,7 +175,7 @@ class BukuView extends GetView<BukuController> {
                                           : dataHistory.status ==
                                           'Selesai'
                                           ? Colors.green
-                                          : const Color(0xFF1B1B1D),
+                                          : Colors.blueAccent,
                                       ),
                                   child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -192,7 +199,7 @@ class BukuView extends GetView<BukuController> {
 
                                           Text(
                                             dataHistory.status == 'Selesai' ? 'Beri Ulasan' : dataHistory.status.toString(),
-                                            style: GoogleFonts.averiaGruesaLibre(
+                                            style: GoogleFonts.inter(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w600,
                                               fontSize: 16,

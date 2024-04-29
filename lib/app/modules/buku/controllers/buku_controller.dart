@@ -27,6 +27,8 @@ class BukuController extends GetxController with StateMixin{
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController ulasanController = TextEditingController();
 
+  var loadingPinjam = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -307,8 +309,190 @@ class BukuController extends GetxController with StateMixin{
     }
   }
 
+  updatePeminjaman(String peminjamanID, String asal) async {
+    loadingPinjam(true);
+    try {
+      FocusScope.of(Get.context!).unfocus();
+      var response;
+      if (asal == "booking") {
+        response = await ApiProvider.instance()
+            .patch('${Endpoint.updatePeminjaman}booking/$peminjamanID');
+      } else {
+        response = await ApiProvider.instance()
+            .patch('${Endpoint.updatePeminjaman}$peminjamanID');
+      }
+
+      if (response.statusCode == 200) {
+        if (asal == 'booking') {
+          Get.snackbar(
+              "Sorry",
+              "Peminjaman buku berhasil di update",
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
+          );
+          getDataHistory();
+        } else {
+          Get.snackbar(
+              "Sorry",
+              "Peminjaman buku berhasil di simpan",
+              backgroundColor: Colors.green,
+              colorText: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
+          );
+        }
+        getDataHistory();
+      } else {
+        Get.snackbar(
+            "Sorry",
+            "Peminjaman buku gagal di update",
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
+        );
+      }
+      loadingUlasan(false);
+    } on dio.DioException catch (e) {
+      loadingUlasan(false);
+      if (e.response != null) {
+        if (e.response?.data != null) {}
+      } else {
+        Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red,
+            colorText: Colors.white,
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
+        );
+      }
+    } catch (e) {
+      loadingPinjam(false);
+      Get.snackbar(
+          "Error", e.toString(),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10)
+      );
+    }
+  }
+
+  Future<void> showConfirmPeminjaman(String idPeminjaman, String asal) async {
+    return showDialog<void>(
+      context: Get.context!,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titleTextStyle: GoogleFonts.inter(
+            fontWeight: FontWeight.w800,
+            fontSize: 20.0,
+            color: Colors.black,
+          ),
+          backgroundColor: const Color(0xFFD3D3D3),
+          title: Text(
+            'Konfirmasi Peminjaman',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.w800,
+              fontSize: 20.0,
+              color: const Color(0xFFEA1818),
+            ),
+          ),
+
+          content: SingleChildScrollView(
+            child: SizedBox(
+              width: MediaQuery.of(Get.context!).size.width,
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                    "Apakah buku yang Anda pinjam, sudah Anda ambil di Perpustakaan?",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
+                        fontSize: 16
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(Get.context!).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width,
+                        height: 45,
+                        child: TextButton(
+                          autofocus: true,
+                          style: TextButton.styleFrom(
+                            backgroundColor: const Color(0xFF1B1B1D),
+                            animationDuration: const Duration(milliseconds: 300),
+                          ),
+                          onPressed: (){
+                            Navigator.pop(Get.context!, 'OK');
+                          },
+                          child: Text(
+                            'Belum',
+                            style: GoogleFonts.inter(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    width: 10,
+                  ),
+
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width,
+                        height: 45,
+                        child: TextButton(
+                          autofocus: true,
+                          style: TextButton.styleFrom(
+                            backgroundColor: const Color(0xFFEA1818),
+                            animationDuration: const Duration(milliseconds: 300),
+                          ),
+                          onPressed: (){
+                            Navigator.pop(Get.context!, 'OK');
+                            updatePeminjaman(idPeminjaman, asal);
+                          },
+                          child: Text(
+                            "Sudah",
+                            style: GoogleFonts.inter(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Bukti Peminjaman Buku
-  Future<void> showBuktiPeminjaman(String kodePeminjaman, String judulBuku, String tanggalPinjam, String tanggalKembali) async {
+  Future<void> showBuktiPeminjaman(String kodePeminjaman, String judulBuku, String tanggalPinjam, String tanggalKembali, String kodePinjam) async {
     return showDialog<void>(
       context: Get.context!,
       barrierDismissible: false,
@@ -497,9 +681,10 @@ class BukuController extends GetxController with StateMixin{
                       ),
                       onPressed: (){
                         Navigator.pop(Get.context!, 'OK');
+                        updatePeminjaman(kodePinjam, 'dipinjam');
                       },
                       child: Text(
-                        'Finally',
+                        'Kembalikan Buku',
                         style: GoogleFonts.inter(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,

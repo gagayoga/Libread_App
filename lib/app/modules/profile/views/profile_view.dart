@@ -88,8 +88,8 @@ class ProfileView extends GetView<ProfileController> {
                   kontenButton(
                       width,
                       (){
-
-                      },Icons.bookmarks,"List"
+                        controller.showBuktiPeminjaman();
+                      },Icons.lock,"Update Password"
                   ),
 
                   const SizedBox(
